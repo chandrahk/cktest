@@ -6,6 +6,7 @@ import "./App.css";
 import { useState } from "react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import Select from "react-select";
+import getHousyTicketData from "./housyTicket";
 
 const options = [
   { value: "hi", label: "Hindi" },
@@ -38,12 +39,14 @@ function App() {
   };
 
   //const data = React.useMemo(() => makeData(3), [])
-  const [data, setData] = React.useState(() => makeData(3));
+  //const [data, setData] = React.useState(() => makeData(3));
+  const [data, setData] = React.useState(() => getHousyTicketData());
   const [originalData] = React.useState(data);
 
   const refresh = () => {
     //alert('Clicked on Refresh')
-    setData(makeData(3));
+    //setData(makeData(3));
+    setData(getHousyTicketData());
   };
 
   const columns = React.useMemo(
@@ -86,9 +89,6 @@ function App() {
           {
             accessor: "col9", // accessor is the "key" in the data
             hideHeader: false
-          },
-          {
-            accessor: "col10" // accessor is the "key" in the data
           }
         ]
       }
