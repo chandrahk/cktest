@@ -9,6 +9,7 @@ import Select from "react-select";
 import getHousyTicketData from "./housyTicket";
 import numberInBoard from "./numberInBoard";
 import validateInput from "./validateInput";
+import Tambola from "tambola-generator";
 
 const options = [
   { value: "hi", label: "Hindi" },
@@ -24,31 +25,34 @@ function syncDelay(milliseconds) {
     end = new Date().getTime();
   }
 }
+let tambolaSequence = [];
 
 function App() {
   const defaultLanguage = 0;
   const [selected, setSelected] = useState(options[defaultLanguage].value);
+  const [num, setNextNum] = useState(0);
+  const [seqTam, setSeq] = useState([]);
 
   const buttonClick = () => {
     //alert('Language is ' + selectedOption)
     var textArr = text.split(" ");
     speak({ voice, text: text });
-    setNumberCalled(textArr);
-    /*
-    for (let i=0;i< textArr.length;i++){
-      console.log(' Text is ' + textArr[i]);
-      let number = textArr[i]
-      syncDelay(5000);
+
+    for (let i = 0; i < textArr.length; i++) {
+      console.log(" Text is " + textArr[i]);
+      let number = textArr[i];
+      speak({ voice, number: number });
     }
-    */
   };
   const [text, setText] = useState("");
+  const [calloutText, setcalloutText] = useState("");
   const { speak, speaking, voices } = useSpeechSynthesis();
 
   //const voice = voices.find(({ lang }) => lang.startsWith("es"));
   const voice = voices.find(({ lang }) => lang.startsWith(selected));
   const [cellValue, setCellValue] = useState("");
   const [numberCalled, setNumberCalled] = useState("");
+  const [disable, setDisable] = React.useState(false);
 
   // Function to get cell value
   const getCellValue = (cell) => {
@@ -72,6 +76,34 @@ function App() {
     }
   };
 
+  function generateSequence() {
+    tambolaSequence = Tambola.getDrawSequence();
+    setSeq(tambolaSequence);
+    setNextNum(0);
+    setText("");
+    setcalloutText("");
+    console.log(tambolaSequence.length + tambolaSequence);
+    setDisable(true);
+  }
+
+  function callNextNumber() {
+    let index = num;
+    let calloutNum = seqTam[num];
+    index++;
+
+    let textvar = "Number called is " + calloutNum;
+
+    setcalloutText("Number called is " + calloutNum);
+
+    setText("Number called is " + calloutNum);
+
+    //speak({voice, textvar});
+    speak({ voice, text });
+    //alert('Number is ' + calloutNum + ' index ' + index)
+
+    setNextNum(index);
+  }
+
   //const data = React.useMemo(() => makeData(3), [])
   //const [data, setData] = React.useState(() => makeData(3));
   const [data, setData] = React.useState(() => getHousyTicketData());
@@ -81,6 +113,9 @@ function App() {
     //alert('Clicked on Refresh')
     //setData(makeData(3));
     setData(getHousyTicketData());
+    setDisable(false);
+    setcalloutText("");
+    setText("");
   };
 
   const columns = React.useMemo(
@@ -144,7 +179,6 @@ function App() {
       <h2> Click Refresh to re-generate the ticket </h2>
       <button onClick={refresh}> Refresh </button>
       <p> </p>
-
       <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -204,26 +238,29 @@ function App() {
       <p></p>
       <p></p>
       <p></p>
-
       <h3> Type some number or text for testing </h3>
       <input
         placeholder="Text to spell"
         value={text}
         onChange={(event) => setText(event.target.value)}
       />
-
+      &nbsp;&nbsp;&nbsp;
+      <input name="forDisplay" fontWeight="bold" value={calloutText} />
       <p> </p>
       <p> </p>
       <p> </p>
       <h3> Click on click me to launch the voice</h3>
       <h4> PS: Sentence translation only applies to Spanish </h4>
-      <button
-        disabled={speaking}
-        style={{ marginLeft: "8px" }}
-        onClick={buttonClick}
-      >
+      <button style={{ marginLeft: "8px" }} onClick={buttonClick}>
         CickMe
       </button>
+      &nbsp;&nbsp;&nbsp;
+      <button disabled={disable} onClick={generateSequence}>
+        {" "}
+        Start Game{" "}
+      </button>
+      &nbsp;&nbsp;&nbsp;
+      <button onClick={callNextNumber}> Next Number </button>
     </div>
   );
 }
