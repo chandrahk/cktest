@@ -25,13 +25,13 @@ function syncDelay(milliseconds) {
     end = new Date().getTime();
   }
 }
-let tambolaSequence = [];
+//let tambolaSequence = [];
 
 function App() {
   const defaultLanguage = 0;
   const [selected, setSelected] = useState(options[defaultLanguage].value);
   const [num, setNextNum] = useState(0);
-  const [seqTam, setSeq] = useState([]);
+  const [seqTam, setSeq] = React.useState(() => Tambola.getDrawSequence());
   const onEnd = () => {
     // You could do something here after speaking has finished
   };
@@ -44,7 +44,7 @@ function App() {
     for (let i = 0; i < textArr.length; i++) {
       console.log(" Text is " + textArr[i]);
       let number = textArr[i];
-      speak({ voice, number: number });
+      speak({ voice, text: number });
     }
     */
   };
@@ -83,20 +83,46 @@ function App() {
   };
 
   function generateSequence() {
-    tambolaSequence = Tambola.getDrawSequence();
-    setSeq(tambolaSequence);
-    setNextNum(0);
+    let tambolaSequence = Tambola.getDrawSequence();
+    //alert(tambolaSequence);
+    setSeq({ seqTam: tambolaSequence });
+    //setNextNum(0);
     setText("");
     setcalloutText("");
     console.log(tambolaSequence.length + tambolaSequence);
     setDisable(true);
-    speak({ voice, text: "Starting game" });
+    speak({
+      voice,
+      text:
+        "Starting game, click on called number on the board, if number is not found next number will be called automatically in 30 seconds"
+    });
+    setInterval(callNextNumber, 1000 * 10);
+  }
+
+  function incrementNumber(oldNumber) {
+    setNextNum(oldNumber + 1);
+  }
+
+  async function increment(num, value) {
+    await setNextNum((num) => num + 1);
   }
 
   function callNextNumber() {
-    let index = num;
+    //let index = num;
+    //let seq = seqTam;
+    alert("Sequence is " + seqTam + " and index " + num);
     let calloutNum = seqTam[num];
-    index++;
+    //alert('Number called is ' + num + ' value is ' + calloutNum)
+    /*
+    this.setState = ({
+      num: num + 1
+    })
+    setNextNum(num+1)
+    */
+    //incrementNumber(num);
+    //setNextNum(prevNum => prevNum+1)
+    //increment(num);
+    setNextNum(num + 1);
 
     let textvar = "Number called is " + calloutNum;
 
@@ -108,8 +134,6 @@ function App() {
     //speak({ voice, text });
     speak({ voice, text: textvar });
     //alert('Number is ' + calloutNum + ' index ' + index)
-
-    setNextNum(index);
   }
 
   //const data = React.useMemo(() => makeData(3), [])
@@ -253,7 +277,12 @@ function App() {
         onChange={(event) => setText(event.target.value)}
       />
       &nbsp;&nbsp;&nbsp;
-      <input name="forDisplay" fontWeight="bold" value={calloutText} />
+      <input
+        name="forDisplay"
+        readOnly={true}
+        fontWeight="bold"
+        value={calloutText}
+      />
       <p> </p>
       <p> </p>
       <p> </p>
@@ -268,7 +297,10 @@ function App() {
         Start Game{" "}
       </button>
       &nbsp;&nbsp;&nbsp;
-      <button onClick={callNextNumber}> Next Number </button>
+      <button disabled={disable} onClick={callNextNumber}>
+        {" "}
+        Next Number{" "}
+      </button>
     </div>
   );
 }
