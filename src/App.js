@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { useTable } from "react-table";
 import makeData from "./makeData";
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import Select from "react-select";
 import getHousyTicketData from "./housyTicket";
@@ -82,6 +82,11 @@ function App() {
     }
   };
 
+  const counterRef = useRef(0);
+  useEffect(() => {
+    counterRef.current = num;
+  });
+
   function generateSequence() {
     let tambolaSequence = Tambola.getDrawSequence();
     //alert(tambolaSequence);
@@ -96,7 +101,10 @@ function App() {
       text:
         "Starting game, click on called number on the board, if number is not found next number will be called automatically in 30 seconds"
     });
-    setInterval(callNextNumber, 1000 * 10);
+    const interval = setInterval(() => {
+      callNextNumber();
+    }, 1000 * 20);
+    return () => clearInterval(interval);
   }
 
   function incrementNumber(oldNumber) {
@@ -110,8 +118,7 @@ function App() {
   function callNextNumber() {
     //let index = num;
     //let seq = seqTam;
-    alert("Sequence is " + seqTam + " and index " + num);
-    let calloutNum = seqTam[num];
+    //alert("Sequence is " + seqTam + " and index " + num);
     //alert('Number called is ' + num + ' value is ' + calloutNum)
     /*
     this.setState = ({
@@ -122,9 +129,12 @@ function App() {
     //incrementNumber(num);
     //setNextNum(prevNum => prevNum+1)
     //increment(num);
-    setNextNum(num + 1);
+    const newNum = counterRef.current + 1;
+    setNextNum(newNum);
+    let calloutNum = seqTam[newNum];
 
     let textvar = "Number called is " + calloutNum;
+    //alert('Text is ' + textvar);
 
     setcalloutText("Number called is " + calloutNum);
     setText("Number called is " + calloutNum);
