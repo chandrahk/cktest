@@ -32,21 +32,27 @@ function App() {
   const [selected, setSelected] = useState(options[defaultLanguage].value);
   const [num, setNextNum] = useState(0);
   const [seqTam, setSeq] = useState([]);
-
+  const onEnd = () => {
+    // You could do something here after speaking has finished
+  };
   const buttonClick = () => {
     //alert('Language is ' + selectedOption)
     var textArr = text.split(" ");
     speak({ voice, text: text });
 
+    /*
     for (let i = 0; i < textArr.length; i++) {
       console.log(" Text is " + textArr[i]);
       let number = textArr[i];
       speak({ voice, number: number });
     }
+    */
   };
   const [text, setText] = useState("");
   const [calloutText, setcalloutText] = useState("");
-  const { speak, speaking, voices } = useSpeechSynthesis();
+  const { speak, speaking, voices } = useSpeechSynthesis({
+    onEnd
+  });
 
   //const voice = voices.find(({ lang }) => lang.startsWith("es"));
   const voice = voices.find(({ lang }) => lang.startsWith(selected));
@@ -84,6 +90,7 @@ function App() {
     setcalloutText("");
     console.log(tambolaSequence.length + tambolaSequence);
     setDisable(true);
+    speak({ voice, text: "Starting game" });
   }
 
   function callNextNumber() {
@@ -94,11 +101,12 @@ function App() {
     let textvar = "Number called is " + calloutNum;
 
     setcalloutText("Number called is " + calloutNum);
-
     setText("Number called is " + calloutNum);
+    setNumberCalled(calloutNum);
 
     //speak({voice, textvar});
-    speak({ voice, text });
+    //speak({ voice, text });
+    speak({ voice, text: textvar });
     //alert('Number is ' + calloutNum + ' index ' + index)
 
     setNextNum(index);
