@@ -18,6 +18,7 @@ const options = [
   { value: "en", label: "English" }
 ];
 
+/*
 function syncDelay(milliseconds) {
   var start = new Date().getTime();
   var end = 0;
@@ -25,13 +26,16 @@ function syncDelay(milliseconds) {
     end = new Date().getTime();
   }
 }
+*/
+
 //let tambolaSequence = [];
 
 function App() {
   const defaultLanguage = 0;
   const [selected, setSelected] = useState(options[defaultLanguage].value);
   const [num, setNextNum] = useState(0);
-  const [seqTam, setSeq] = React.useState(() => Tambola.getDrawSequence());
+  //const [seqTam, setSeq] = React.useState(() => Tambola.getDrawSequence());
+  const [seqTam, setSeq] = React.useState(() => []);
   const onEnd = () => {
     // You could do something here after speaking has finished
   };
@@ -76,47 +80,67 @@ function App() {
         //cell.background = 'solid 3px red'
         //cell.color = 'red'
         alert("number found move on to next");
+        callNextNumber();
       }
     } else {
       alert("number not found on board");
+      callNextNumber();
     }
   };
 
+  /*
   const counterRef = useRef(0);
   useEffect(() => {
     counterRef.current = num;
   });
+  */
 
   function generateSequence() {
-    let tambolaSequence = Tambola.getDrawSequence();
+    //let tambolaSequence = Tambola.getDrawSequence();
     //alert(tambolaSequence);
-    setSeq({ seqTam: tambolaSequence });
-    //setNextNum(0);
-    setText("");
-    setcalloutText("");
-    console.log(tambolaSequence.length + tambolaSequence);
+
     setDisable(true);
     speak({
       voice,
       text:
-        "Starting game, click on called number on the board, if number is not found next number will be called automatically in 30 seconds"
+        "Starting game, click on called number on the board, click on empty cell if number is not found"
     });
+
+    //
+    //setNextNum(0);
+
+    sleep(1000 * 10).then(() => {
+      //do stuff
+      //alert('after a few seconds')
+
+      setText("");
+      setcalloutText("");
+
+      setNextNum(0);
+      setSeq([]);
+      setSeq(Tambola.getDrawSequence(), callNextNumber());
+    });
+
+    /*
     const interval = setInterval(() => {
       callNextNumber();
     }, 1000 * 20);
     return () => clearInterval(interval);
+    */
   }
 
   function incrementNumber(oldNumber) {
     setNextNum(oldNumber + 1);
   }
 
+  const sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
   async function increment(num, value) {
     await setNextNum((num) => num + 1);
   }
 
   function callNextNumber() {
-    //let index = num;
     //let seq = seqTam;
     //alert("Sequence is " + seqTam + " and index " + num);
     //alert('Number called is ' + num + ' value is ' + calloutNum)
@@ -129,16 +153,23 @@ function App() {
     //incrementNumber(num);
     //setNextNum(prevNum => prevNum+1)
     //increment(num);
-    const newNum = counterRef.current + 1;
-    setNextNum(newNum);
-    let calloutNum = seqTam[newNum];
+    //const newNum = counterRef.current + 1;
+
+    let index = num;
+    console.log("Sequence " + seqTam + " and index " + index);
+    if (seqTam[index] === undefined) return;
+
+    let calloutNum = seqTam[index];
 
     let textvar = "Number called is " + calloutNum;
     //alert('Text is ' + textvar);
 
     setcalloutText("Number called is " + calloutNum);
-    setText("Number called is " + calloutNum);
+    setText("Index is " + index);
     setNumberCalled(calloutNum);
+
+    index = index + 1;
+    setNextNum(index);
 
     //speak({voice, textvar});
     //speak({ voice, text });
