@@ -171,15 +171,16 @@ function App() {
     setText("Index is " + index);
     setNumberCalled(calloutNum);
 
-    if (index < 99) index = index + 1;
+    if (index < 25) index = index + 1;
     else {
-      alert("All numbers exhuasted");
+      alert("All numbers exhuasted --> Calling just 25 now");
     }
     setNextNum(index);
+    speak({ voice, text: textvar });
 
     //speak({voice, textvar});
     //speak({ voice, text });
-    speak({ voice, text: textvar });
+
     //alert('Number is ' + calloutNum + ' index ' + index)
   }
 
