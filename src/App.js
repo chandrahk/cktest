@@ -72,18 +72,18 @@ function App() {
     //setColumn(cell)
     if (numberInBoard(data, numberCalled)) {
       if (!validateInput(data, numberCalled, cell.value)) {
-        alert("click on the correct number");
+        alert("click on the correct cell that has your number");
       } else {
         // Color background
         //cell.css("background-color", "lightgrey")
 
         //cell.background = 'solid 3px red'
         //cell.color = 'red'
-        alert("number found move on to next");
+        //alert("number found move on to next");
         callNextNumber();
       }
     } else {
-      alert("number not found on board");
+      //alert("number not found on board");
       callNextNumber();
     }
   };
@@ -157,7 +157,10 @@ function App() {
 
     let index = num;
     console.log("Sequence " + seqTam + " and index " + index);
-    if (seqTam[index] === undefined) return;
+    if (seqTam[index] === undefined) {
+      alert("Click on any empty cell to start");
+      return;
+    }
 
     let calloutNum = seqTam[index];
 
@@ -168,7 +171,10 @@ function App() {
     setText("Index is " + index);
     setNumberCalled(calloutNum);
 
-    index = index + 1;
+    if (index < 99) index = index + 1;
+    else {
+      alert("All numbers exhuasted");
+    }
     setNextNum(index);
 
     //speak({voice, textvar});
