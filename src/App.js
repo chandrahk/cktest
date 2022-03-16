@@ -68,21 +68,32 @@ function App() {
   const [clickedNumber, setClickedNumber] = useState([]);
 
   useEffect(() => {
-    // this hook will get called everytime when myArr has changed
-    // perform some action which will get fired everytime when myArr gets updated
+    // this hook will get called everytime when seqTam has changed
+    // perform some action which will get fired everytime when seqTam
+    // gets updated
+    console.log("Updated State ", seqTam);
+    //alert('Geneated sequence' + seqTam)
+  }, [seqTam]);
+
+  useEffect(() => {
+    // this hook will get called everytime when clickedNumber has changed
+    // perform some action which will get fired everytime when clickedNumber
+    // gets updated
     console.log("Updated State", clickedNumber);
-    alert("Array is " + clickedNumber);
+    //alert("Array is " + clickedNumber);
   }, [clickedNumber]);
 
   // Function to get cell value
   const getCellValue = (cell) => {
     console.log("In get cell" + cell.value);
-    setCellValue("x");
+    //setCellValue("x");
     //cellvalue === "blue" ? (cellvalue = "red") : (cellvalue = "blue")
     //setColumn(cell)
     if (numberInBoard(data, numberCalled)) {
       if (!validateInput(data, numberCalled, cell.value)) {
-        alert("click on the correct cell that has your number");
+        alert(
+          "click on the correct cell that has your number --> " + numberCalled
+        );
       } else {
         // Color background
         //cell.css("background-color", "lightgrey")
@@ -132,6 +143,10 @@ function App() {
 
       setNextNum(0);
       setSeq([]);
+      // Now we can just generate sequence without sleep
+      // and the call back function and let useEffect
+      // to call the number since the sequence is never
+      // changed for the running game
       setSeq(Tambola.getDrawSequence(), callNextNumber());
     });
 
