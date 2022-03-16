@@ -10,6 +10,7 @@ import getHousyTicketData from "./housyTicket";
 import numberInBoard from "./numberInBoard";
 import validateInput from "./validateInput";
 import Tambola from "tambola-generator";
+import findWinningCombination from "./findWinningComb";
 
 const options = [
   { value: "hi", label: "Hindi" },
@@ -80,6 +81,12 @@ function App() {
     // perform some action which will get fired everytime when clickedNumber
     // gets updated
     console.log("Updated State", clickedNumber);
+    if (clickedNumber.length >= 4) {
+      let rtn = findWinningCombination(data, seqTam, clickedNumber);
+      if (rtn) {
+        alert("You won on any five");
+      }
+    }
     //alert("Array is " + clickedNumber);
   }, [clickedNumber]);
 
