@@ -85,6 +85,12 @@ function App() {
       let rtn = findWinningCombination(data, seqTam, clickedNumber);
       if (rtn) {
         alert("You won on any five");
+        setDisable(false);
+        speak({
+          voice,
+          text: "You won click, Please click Refresh to restart"
+        });
+        setClickedNumber([]);
       }
     }
     //alert("Array is " + clickedNumber);

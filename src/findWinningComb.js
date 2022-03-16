@@ -6,6 +6,18 @@ export default function findWinningCombination(
   return earlyFive(selectedNumbers, calledNumbers);
 }
 
+function getBullsEyeNumber(board) {
+  return board[1][4];
+}
+
+function bullsEye(bullsEyeNumber, selectedNumbers) {
+  let num = selectedNumbers.indexOf(bullsEyeNumber);
+  let rtn = false;
+  if (num !== -1) {
+    rtn = true;
+  }
+  return rtn;
+}
 function earlyFive(selectedNumbers, calledNumbers) {
   let rtn = false;
   let j = 0;
