@@ -68,11 +68,15 @@ function App() {
   // Keep track of clickedNumber
   const [clickedNumber, setClickedNumber] = useState([]);
 
+  useEffe
   useEffect(() => {
     // this hook will get called everytime when seqTam has changed
     // perform some action which will get fired everytime when seqTam
     // gets updated
     console.log("Updated State ", seqTam);
+           setNextNum(0);
+        setSeq([]);
+        setClickedNumber([]);
     //alert('Geneated sequence' + seqTam)
   }, [seqTam]);
 
@@ -88,9 +92,14 @@ function App() {
         setDisable(false);
         speak({
           voice,
-          text: "You won click, Please click Refresh to restart"
+          text: "You won, Please click start game to restart new game"
         });
-        setClickedNumber([]);
+        //setClickedNumber([]);
+        //generateSequence();
+
+        // Reset and refresh
+ 
+        refresh();
       }
     }
     //alert("Array is " + clickedNumber);

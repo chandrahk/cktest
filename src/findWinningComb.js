@@ -3,11 +3,44 @@ export default function findWinningCombination(
   selectedNumbers,
   calledNumbers
 ) {
+  let win=-1
+  if (bullsEye(getBullsEyeNumber(board), selectedNumbers)){
+    alert('Found bulleye');
+    win=1;
+  }
+  if(anyLineFive(board, 0, selectedNumbers)){
+    win=2;
+  }
+  if(anyLineFive(board, 1, selectedNumbers)){
+    win=3;
+  }
+  if(anyLineFive(board, 2, selectedNumbers)){
+    win=4;
+  }
   return earlyFive(selectedNumbers, calledNumbers);
 }
 
 function getBullsEyeNumber(board) {
   return board[1][4];
+}
+
+function anyLineFive(board, line, selectedNumbers){
+  let rtn_val=false;
+  let j=0;
+  for (let i = 0; i < selectedNumbers.length; i++) {
+    if (selectedNumbers[j] !== board[line][i])
+    {
+      return rtn_val;
+    }
+    else{
+      rtn_val=true;
+      j++;
+    }
+
+  }
+  return rtn_val;
+
+
 }
 
 function bullsEye(bullsEyeNumber, selectedNumbers) {
