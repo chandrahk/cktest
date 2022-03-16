@@ -64,6 +64,16 @@ function App() {
   const [numberCalled, setNumberCalled] = useState("");
   const [disable, setDisable] = React.useState(false);
 
+  // Keep track of clickedNumber
+  const [clickedNumber, setClickedNumber] = useState([]);
+
+  useEffect(() => {
+    // this hook will get called everytime when myArr has changed
+    // perform some action which will get fired everytime when myArr gets updated
+    console.log("Updated State", clickedNumber);
+    alert("Array is " + clickedNumber);
+  }, [clickedNumber]);
+
   // Function to get cell value
   const getCellValue = (cell) => {
     console.log("In get cell" + cell.value);
@@ -80,6 +90,10 @@ function App() {
         //cell.background = 'solid 3px red'
         //cell.color = 'red'
         //alert("number found move on to next");
+        const newArr = [...clickedNumber];
+        //newArr[i] = !newArr[i];
+        newArr.push(cell.value);
+        setClickedNumber(() => newArr);
         callNextNumber();
       }
     } else {
