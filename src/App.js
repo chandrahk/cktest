@@ -11,6 +11,7 @@ import numberInBoard from "./numberInBoard";
 import validateInput from "./validateInput";
 import Tambola from "tambola-generator";
 import findWinningCombination from "./findWinningComb";
+import bullsEye from "./bullsEye";
 
 const options = [
   { value: "hi", label: "Hindi" },
@@ -68,15 +69,14 @@ function App() {
   // Keep track of clickedNumber
   const [clickedNumber, setClickedNumber] = useState([]);
 
-  useEffe
   useEffect(() => {
     // this hook will get called everytime when seqTam has changed
     // perform some action which will get fired everytime when seqTam
     // gets updated
     console.log("Updated State ", seqTam);
-           setNextNum(0);
-        setSeq([]);
-        setClickedNumber([]);
+    setNextNum(0);
+    //setSeq([]);
+    //setClickedNumber([]);
     //alert('Geneated sequence' + seqTam)
   }, [seqTam]);
 
@@ -98,8 +98,12 @@ function App() {
         //generateSequence();
 
         // Reset and refresh
- 
+
         refresh();
+      } else {
+        if (bullsEye(data, clickedNumber)) {
+          alert("Found bulleye");
+        }
       }
     }
     //alert("Array is " + clickedNumber);
@@ -247,6 +251,9 @@ function App() {
     setDisable(false);
     setcalloutText("");
     setText("");
+    setSeq([]);
+    setNumberCalled("");
+    setClickedNumber([]);
   };
 
   const columns = React.useMemo(
