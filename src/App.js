@@ -81,7 +81,7 @@ function App() {
     // perform some action which will get fired everytime when clickedNumber
     // gets updated
     console.log("Updated State", clickedNumber);
-    if (clickedNumber.length >= 4) {
+    if (clickedNumber.length > 4) {
       let rtn = findWinningCombination(data, seqTam, clickedNumber);
       if (rtn) {
         alert("You won on any five");
@@ -207,9 +207,9 @@ function App() {
     setText("Index is " + index);
     setNumberCalled(calloutNum);
 
-    if (index < 25) index = index + 1;
+    if (index < 50) index = index + 1;
     else {
-      alert("All numbers exhuasted --> Calling just 25 now");
+      alert("All numbers exhuasted --> Calling just 50 now");
     }
     setNextNum(index);
     speak({ voice, text: textvar });

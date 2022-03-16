@@ -9,13 +9,23 @@ export default function findWinningCombination(
 function earlyFive(selectedNumbers, calledNumbers) {
   let rtn = false;
   let j = 0;
+  //alert('Selected numbers ' + selectedNumbers)
+  //alert('Called numbers ' + calledNumbers)
+
+  // We could just check if length > 4 since we are
+  // already checking whether the person clicked on board
+  // and number was on board
+  if (selectedNumbers.length > 4) return true;
+
+  // The below is round about way and not needed
   for (let i = 0; i < selectedNumbers.length; i++) {
-    if (!calledNumbers.find(selectedNumbers[i])) {
+    let num = calledNumbers.indexOf(selectedNumbers[i]);
+    if (num === -1) {
       rtn = false;
     } else {
       j++;
-      // found it is it 4 as in 5 numbers
-      if (j >= 4) {
+      // found it.. Is it at least 5 numbers found?
+      if (j > 4) {
         return true;
       }
     }
