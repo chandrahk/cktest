@@ -101,8 +101,12 @@ function App() {
 
         refresh();
       } else {
-        if (bullsEye(data, clickedNumber)) {
-          alert("Found bulleye");
+        // Only one nunber found and we ran out of all numbers
+        // Now check whether it was bullseye
+        if (clickedNumber.length === 1 && num === 50) {
+          if (bullsEye(data, clickedNumber)) {
+            alert("Found bulleye");
+          }
         }
       }
     }
@@ -132,6 +136,9 @@ function App() {
         newArr.push(cell.value);
         setClickedNumber(() => newArr);
         callNextNumber();
+
+        // Number called/clicked has been validated to be on table
+        // so we don't need extra checks for any 5
       }
     } else {
       //alert("number not found on board");

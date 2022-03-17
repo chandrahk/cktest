@@ -5,15 +5,18 @@ export default function findWinningCombination(
 ) {
   let win = -1;
 
-  if (anyLineFive(board, 0, selectedNumbers)) {
-    win = 1;
+  if (selectedNumbers.length > 4) {
+    if (anyLineFive(board, 0, selectedNumbers)) {
+      win = 1; // Row 1 five
+    } else if (anyLineFive(board, 1, selectedNumbers)) {
+      win = 2; // Row 2 five
+    } else if (anyLineFive(board, 2, selectedNumbers)) {
+      win = 3; // Row 3 five
+    } else {
+      win = 4; // Any random five on table
+    }
   }
-  if (anyLineFive(board, 1, selectedNumbers)) {
-    win = 2;
-  }
-  if (anyLineFive(board, 2, selectedNumbers)) {
-    win = 3;
-  }
+
   return earlyFive(selectedNumbers, calledNumbers);
 }
 
